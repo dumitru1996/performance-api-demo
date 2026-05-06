@@ -4,15 +4,10 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
+.idea/*
 *.iws
 *.iml
 *.ipr
-     git config --global user.name "dumitru1996"
-     git config --global user.email "dmitrii1996@gmail.com"
 
 ### Eclipse ###
 .apt_generated
