@@ -1,0 +1,51 @@
+<configuration>
+
+    <!-- ============================================================
+         Console appender – used during local development
+    ============================================================ -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,UTC} [%thread] %-5level %logger{30} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ============================================================
+         Sifting appender – writes one log file per Cucumber scenario
+         keyed on the MDC value 'scenarioDir' set in BeforeHooks.
+    ============================================================ -->
+    <appender name="RootSiftAppender" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator class="ch.qos.logback.classic.sift.MDCBasedDiscriminator">
+            <key>scenarioDir</key>
+            <defaultValue>testrun</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="FILE-${scenarioDir}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>target/logs/${scenarioDir}/execution.log</file>
+                <append>true</append>
+                <immediateFlush>true</immediateFlush>
+                <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+                    <fileNamePattern>target/logs/${scenarioDir}/execution_%i.log</fileNamePattern>
+                    <minIndex>1</minIndex>
+                    <maxIndex>10</maxIndex>
+                </rollingPolicy>
+                <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                    <maxFileSize>10MB</maxFileSize>
+                </triggeringPolicy>
+                <encoder>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,UTC} [%thread] %-5level %logger{30} - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="RootSiftAppender"/>
+    </root>
+
+    <!-- Reduce noise from Playwright internal libraries -->
+    <logger name="com.microsoft.playwright" level="WARN"/>
+
+</configuration>
+

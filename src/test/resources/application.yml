@@ -1,0 +1,22 @@
+test.framework:
+  ui:
+    base-url: https://www.parlament.md
+    browser: chromium
+    headless: ${headless:false}
+    pageLoadTimeout: 15000
+    customProperties:
+      - --disable-web-security
+      - --ignore-certificate-errors
+      - --start-maximized
+    headlessArguments:
+      - --headless
+      - --no-sandbox
+      - --disable-dev-shm-usage
+      - --disable-extensions
+    slow:
+      motion: ${PLAYWRIGHT_SLOW_MOTION:400}
+      timeout: 10000
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
